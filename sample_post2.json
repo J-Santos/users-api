@@ -1,0 +1,19 @@
+{
+    "email" : "testing@email.com",
+    "password" : "testing_password",
+    "user_type": "patient",
+    "patient_id": "123456789",
+    "family_patient_id": "",
+    "name": {
+    	"first_name": "Testing",
+    	"last_name": "Test"
+    },
+    "phone_number": "888-888-8888",
+    "address": {
+    	"street": "1111 Street Name",
+    	"city": "San Jose",
+    	"state": "CA",
+    	"county": "San Jose County",
+    	"country": "USA"
+    }
+}

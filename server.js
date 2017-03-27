@@ -97,18 +97,18 @@ router.route("/users/:user_id")
     })
 
     .put(function(req, res) {
-            usersModel.updateUser({email:req.params.user_id},req.body,function(err,user){
-                //console.log("Err: "+JSON.stringify(err, ["message", "arguments", "type", "name"]));
-                if (err){
-                    res.status(500).send(err.message);
-                }
-                else if(user == undefined || user == null  ){
-                    res.status(404).json({ message: 'User not found' });
-                }
-                else{
-                    res.status(204).send();
-                }
-            });
+        usersModel.updateUser({email:req.params.user_id},req.body,function(err,user){
+            //console.log("Err: "+JSON.stringify(err, ["message", "arguments", "type", "name"]));
+            if (err){
+                res.status(500).send(err.message);
+            }
+            else if(user == undefined || user == null  ){
+                res.status(404).json({ message: 'User not found' });
+            }
+            else{
+                res.status(204).send();
+            }
+        });
     })
 
     .delete(function(req, res) {

@@ -14,11 +14,20 @@ var userModel = require('../schemas/user');
 var User = userModel.User;
 
 exports.createUser = function (req,callback){
-	var user = new User(req.body);
-	//console.log(req.body);
-    user.save(function(err) {
-        callback(err);
-    });
+	var new_user = new User(req.body);
+	//console.log(req.body.email);
+	User.findOne({email:req.body.email},function(err,user){	
+		//console.log(user);
+		if(err){
+			return callback(err,null);
+		}
+		else if(user != null){
+			return callback(new Error("User already exists."));
+		}
+		new_user.save(function(err) {
+        	callback(err);
+    	});
+	});
 }
 
 // exports.getUsers = function (req,callback){
