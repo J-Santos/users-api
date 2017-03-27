@@ -125,5 +125,16 @@ app.use('/',router);
 app.listen(3000);
 console.log("Listening to PORT 3000");
 
+var http = require ('http');
 var mongoose    =   require("mongoose");
-mongoose.connect('mongodb://localhost:27017/users');
+//mongoose.connect('mongodb://localhost:27017/users');
+var connection_uri = process.env.MONGODB_URI || 'mongodb://cmpe295a:chandra3295a@ds143330.mlab.com:43330/healthcare-system';
+
+mongoose.connect(connection_uri, function (err, res) {
+  if (err) { 
+    console.log ('ERROR connecting to: ' + connection_uri + '. ' + err);
+  } else {
+    console.log ('Succeeded connected to: ' + connection_uri);
+  }
+});
+
