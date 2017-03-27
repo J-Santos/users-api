@@ -122,8 +122,9 @@ router.route("/users/:user_id")
 
 app.use('/',router);
 
-app.listen(3000);
-console.log("Listening to PORT 3000");
+var port = process.env.PORT || 5000;
+app.listen(port);
+console.log("Listening to PORT "+ port);
 
 var http = require ('http');
 var mongoose    =   require("mongoose");
