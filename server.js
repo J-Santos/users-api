@@ -14,17 +14,6 @@ router.get("/",function(req,res){
 
 router.route("/users")
     .get(function(req,res){
-        // var response = {};
-        // usersModel.find({},function(err,data){
-        // // Mongo command to fetch all data from collection.
-        //     if(err) {
-        //         response = {"error" : true,"message" : "Error fetching data"};
-        //     } else {
-        //         response = {"error" : false,"message" : data};
-        //     }
-        //     res.json(response);
-        // });
-
         var query = {
             email : req.param('email'),
             password : req.param('password')
@@ -83,7 +72,7 @@ router.route("/users")
 router.route("/users/:user_id")
     .get(function(req,res){
         usersModel.getUser(req,function(err,user){
-            console.log(user);
+            //console.log(user);
             if (err){
                 res.status(500).send(err.message);
             }
