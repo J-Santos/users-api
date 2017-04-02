@@ -1,8 +1,9 @@
-var express     =   require("express");
-var app         =   express();
-var bodyParser  =   require("body-parser");
-var usersModel     =   require("./models/users");
-var router      =   express.Router();
+var express             =   require("express");
+var app                 =   express();
+var bodyParser          =   require("body-parser");
+var usersModel          =   require("./models/users");
+var appointmentsModel   =   require("./models/appointments");
+var router              =   express.Router();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({"extended" : true}));
@@ -12,11 +13,11 @@ router.get("/",function(req,res){
 });
 
 
-router.route("/users")
+router.route("/api/users")
     .get(function(req,res){
         var query = {
-            email : req.param('email'),
-            password : req.param('password')
+            email : req.param.email,
+            password : req.param.password
         }
         //console.log('Before getUsers');
         usersModel.getUsers(query,function(err,users){
@@ -31,19 +32,18 @@ router.route("/users")
                 res.status(200).json(users);
             }
         });
-
-
-
     })
 
     .post(function(req,res){
         var response = res;
         //console.log(req.body);
         usersModel.createUser(req, function (err){
-            if(err)
+            if(err){
                 res.status(500).send(err.message);
-            else
+            }
+            else{
                 res.status(201).json({ message: 'User created!' });
+            }
         });
         //var db = new usersModel();
         // var response = res;
@@ -56,20 +56,9 @@ router.route("/users")
         //                   .createHash('sha1')
         //                   .update(req.body.password)
         //                   .digest('base64');
-        
-        // db.save(function(err){
-        // // save() will run insert() command of MongoDB.
-        // // it will add new data in collection.
-        //     if(err) {
-        //         response = {"error" : true,"message" : "Error adding data"};
-        //     } else {
-        //         response = {"error" : false,"message" : "Data added"};
-        //     }
-        //     res.json(response);
-        // });
     });
 
-router.route("/users/:user_id")
+router.route("/api/users/:user_id")
     .get(function(req,res){
         usersModel.getUser(req,function(err,user){
             //console.log(user);
@@ -109,6 +98,90 @@ router.route("/users/:user_id")
         });
     });
 
+router.route("/api/users/:user_id/appointments")
+    .post(function(req,res){
+        appointmentsModel.addAppointment({email:req.params.user_id},req,function(err,user){
+            if (err){
+                res.status(500).send(err.message);
+            }
+            else if(user == undefined || user == null  ){
+                res.status(404).json({ message: 'User not found' });
+            }
+            else{
+                res.status(201).json({ message: 'Appointment added!' });
+            }
+        });
+    })
+    .get(function(req,res){
+        appointmentsModel.getUserAppointments(req,function(err,user){
+            //console.log(user);
+            if (err){
+                res.status(500).send(err.message);
+            }
+            else if(user == undefined || user == null || user == []){
+                res.status(404).json({ message: 'User not found' })
+            }
+            else{
+                res.status(200).json(user);
+            }
+        });
+    });
+
+router.route("/api/users/:user_id/appointments/:appointment_id")
+    .get(function(req,res){
+        appointmentsModel.getAppointment({_id : req.params.appointment_id},function(err,appointment){
+            if (err){
+                res.status(500).send(err.message);
+            }
+            else if(appointment == undefined || appointment == null || appointment == []){
+                res.status(404).json({ message: 'Appointment not found' })
+            }
+            else{
+                res.status(200).json(appointment);
+            }
+        });
+    })
+
+    .put(function(req, res) {
+        appointmentsModel.updateAppointment({_id : req.params.appointment_id},req.body,function(err,appointment){
+            if (err){
+                res.status(500).send(err.message);
+            }
+            else if(appointment == undefined || appointment == null  ){
+                res.status(404).json({ message: 'Appointment not found' });
+            }
+            else{
+                res.status(204).send();
+            }
+        });
+    })
+
+    .delete(function(req, res) {
+        appointmentsModel.deleteAppointment(req,function(err){
+            if (err)
+                res.status(500).send(err.message);
+            else
+                res.status(200).json({ message: 'Appointment deleted' });
+        });
+    });
+
+
+router.route("/api/users/:user_id/patients")
+    .get(function(req,res){
+        usersModel.getUserPatients(req,function(err,user){
+            if (err){
+                res.status(500).send(err.message);
+            }
+            else if(user == undefined || user == null || user == []){
+                res.status(404).json({ message: 'User not found' })
+            }
+            else{
+                res.status(200).json(user);
+            }
+        });
+    });
+
+
 app.use('/',router);
 
 var port = process.env.PORT || 5000;
@@ -118,6 +191,7 @@ console.log("Listening to PORT "+ port);
 var http = require ('http');
 var mongoose    =   require("mongoose");
 //mongoose.connect('mongodb://localhost:27017/users');
+//var connection_uri = 'mongodb://localhost:27017/healthcare-system'
 var connection_uri = process.env.MONGODB_URI || 'mongodb://cmpe295a:chandra3295a@ds143330.mlab.com:43330/healthcare-system';
 
 mongoose.connect(connection_uri, function (err, res) {

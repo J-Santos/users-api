@@ -3,7 +3,7 @@ var User = userModel.User;
 
 exports.createUser = function (req,callback){
 	var new_user = new User(req.body);
-	//console.log(req.body.email);
+	//console.log(req.body);
 	User.findOne({email:req.body.email},function(err,user){	
 		//console.log(user);
 		if(err){
@@ -13,6 +13,7 @@ exports.createUser = function (req,callback){
 			return callback(new Error("User already exists."));
 		}
 		new_user.save(function(err) {
+			//console.log(err);
         	callback(err);
     	});
 	});
@@ -55,7 +56,7 @@ exports.getUser = function (req, callback){
     });
 }
 
-exports.updateUser = function (query, conditions,callback){
+exports.updateUser = function (query, conditions, callback){
 	//console.log("User body: "+JSON.stringify(conditions));
 	User.findOne(query,function(err,user){	
 		if(err){
@@ -81,7 +82,11 @@ exports.deleteUser = function (req,callback){
     });
 }
 
-
+exports.getUserPatients = function (req,callback){
+	User.find({'user_type': 'patient', 'doctor_id': req.params.user_id},function(err, users) {
+		callback(err,users)
+	});	
+}
 
 
 

@@ -1,52 +1,34 @@
 var mongoose    =   require("mongoose");
-//var mongoSchema =   mongoose.Schema;
-// create schema
+var apptSchema = require('./appointment');
+var Appointment = apptSchema.Appointment;
+var addressSchema = require('./address');
+var Address = addressSchema.Address;
+
 var userSchema  = new mongoose.Schema({
-    "email" : String,
-    "password" : String,
-    "user_type": String,
-    "patient_id": String,
-    "family_patient_id": String,
+    "email" : {type: String},
+    "password" : {type: String},
+    "user_type": {type: String},
+    "patient_id": {type: String},
+    "family_patient_id": {type: String},
+    "doctor_id": {type: String},
     "name": {
-    	"first_name": String,
-    	"last_name": String
+    	"first_name": {type: String},
+    	"last_name": {type: String},
     },
-    "phone_number": String,
-    "address": {
-    	"street": String,
-    	"city": String,
-    	"state": String,
-    	"county": String,
-    	"country": String,
-    },
+    "phone_number": {type: String},
+    "address": {type: mongoose.Schema.Types, ref: 'Address'},
     "medical_record":{
-    	"patient_id": String,
-    	"gender": String,
-    	"age": Number,
-    	"weight": Number,
-    	"doctor": String,
+    	"patient_id": {type: String},
+    	"gender": {type: String},
+    	"age": {type: Number},
+    	"weight": {type: Number},
     	"past_diagnosis": [String],
     	"current_diagnosis": [String],
     	"family_history": [String],
     	"prescriptions": [String],
-    	"upcoming_appts":{
-    		"patient_id": String,
-    		"doctor_id": String,
-    		"date": String,
-    		"time": String,
-    		"location":{
-    			"place": String,
-    			"phone_number": String,
-    			"address":{
-    				"street": String,
-    				"city": String,
-    				"state": String,
-    				"county": String,
-    				"country": String
-    			}
-    		}
-    	}
-    }
+    },
+    "upcoming_appts": [{type: mongoose.Schema.Types.ObjectId, ref: 'Appointment'}],
+    "patients": [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 // create model if not exists.
 exports.User = mongoose.model('User', userSchema);
