@@ -65,3 +65,234 @@
         }
     }
 }
+
+
+
+Patient:
+
+{
+    "email" : "testingpatient@email.com",
+    "password" : "testing_password",
+    "user_type": "patient",
+    "doctor_id": "doctor@email.com",
+    "patient_id": "testingpatient@email.com",
+    "family_patient_id": "",
+    "name": {
+        "first_name": "Testing",
+        "last_name": "Test"
+    },
+    "phone_number": "888-888-8888",
+    "address": {
+        "street": "1111 Street Name",
+        "city": "San Jose",
+        "state": "CA",
+        "zip": "90001",
+        "county": "San Jose County",
+        "country": "USA"
+    }
+}
+
+{
+    "email" : "patient@email.com",
+    "password" : "testing_password",
+    "user_type": "patient",
+    "doctor_id": "doctor_test@email.com",
+    "patient_id": "patient@email.com",
+    "family_patient_id": "",
+    "name": {
+        "first_name": "Testing",
+        "last_name": "Test"
+    },
+    "phone_number": "888-888-8888",
+    "address": {
+        "street": "1111 Street Name",
+        "city": "San Jose",
+        "state": "CA",
+        "zip": "90001",
+        "county": "San Jose County",
+        "country": "USA"
+    }
+}
+
+Doctor
+
+{
+    "email" : "doctor@email.com",
+    "password" : "doctor_password",
+    "user_type": "doctor",
+    "name": {
+        "first_name": "Testing",
+        "last_name": "Test"
+    },
+    "phone_number": "888-888-8888",
+    "address": {
+        "street": "1111 Street Name",
+        "city": "San Jose",
+        "state": "CA",
+        "zip": "90001",
+        "county": "San Jose County",
+        "country": "USA"
+    }
+}
+
+Appointment POST
+
+{
+    "patient_id": "testingpatient@email.com",
+    "doctor_id": "doctor@email.com",
+    "date": "4/1/17",
+    "time": "3:00 PM",
+    "location":{
+        "place": "San Jose Hospital",
+        "phone_number": "999-999-9999",
+        "address":{
+            "street": "4444 Hospital Way",
+            "city": "San Jose",
+            "state": "CA",
+            "county": "San Jose County",
+            "country": "USA"
+        }
+    }
+}
+
+Appt PUT
+
+{
+    "location":{
+        "place": "San Jose Hospital",
+        "phone_number": "777-999-9999",
+        "address":{
+            "street": "9999 Hospital Way",
+            "city": "San Jose",
+            "state": "CA",
+            "county": "San Jose County",
+            "country": "USA"
+        }
+    }
+}
+
+
+POST https://remote-healthcare-assistant.herokuapp.com/api/users
+
+{
+    "email" : "patient_number2@email.com",
+    "password" : "testing_password",
+    "user_type": "patient",
+    "doctor_id": "doctor_test@email.com",
+    "patient_id": "patient@email.com",
+    "family_patient_id": "",
+    "name": {
+        "first_name": "Testing",
+        "last_name": "Test"
+    },
+    "phone_number": "888-888-8888",
+    "address": {
+        "street": "8888 Street Name",
+        "city": "San Jose",
+        "state": "CA",
+        "zip": "90001",
+        "county": "San Jose County",
+        "country": "USA"
+    }
+}
+
+PUT https://remote-healthcare-assistant.herokuapp.com/api/users/patient@email.com
+
+{
+    "name": {
+        "first_name": "Test",
+        "last_name": "Testing"
+    },
+    "phone_number": "999-999-8888",
+    "address": {
+        "street": "999 Street Name",
+        "city": "Santa Clara",
+        "state": "CA",
+        "county": "Santa Clara County",
+        "country": "USA"
+    }
+}
+
+GET https://remote-healthcare-assistant.herokuapp.com/api/users
+
+POST https://remote-healthcare-assistant.herokuapp.com/api/users/patient@email.com/appointments
+
+{
+    "patient_id": "patient@email.com",
+    "doctor_id": "doctor@email.com",
+    "date": "4/5/17",
+    "time": "8:00 AM",
+    "location":{
+        "place": "Santa Clara Hospital",
+        "phone_number": "999-999-9999",
+        "address":{
+            "street": "4444 Hospital Way",
+            "city": "Santa Clara",
+            "state": "CA",
+            "county": "Santa Clara County",
+            "country": "USA"
+        }
+    }
+}
+
+PUT https://remote-healthcare-assistant.herokuapp.com/api/users/patient@email.com/appointments/58e1a522fee433001138747d
+
+{
+    "location":{
+        "place": "San Jose Hospital",
+        "phone_number": "777-444-9999",
+        "address":{
+            "street": "9999 Hospital Way",
+            "city": "San Jose",
+            "state": "CA",
+            "county": "San Jose County",
+            "country": "USA"
+        }
+    }
+}
+
+DELETE https://remote-healthcare-assistant.herokuapp.com/api/users/patient@email.com/appointments/58e1a522fee433001138747d
+
+GET https://remote-healthcare-assistant.herokuapp.com/api/users/doctor@email.com/patients
+
+DELETE https://remote-healthcare-assistant.herokuapp.com/users/testing@email.com
+
+GET http://localhost:5000/api/diseases
+
+POST http://localhost:5000/api/diseases
+
+{
+    "name": "disease_1",
+    "description": "This is disease 1.",
+    "symptoms": ["symptom1","symptom2","symptom3","symptom4","symptom5"]
+}
+
+{
+    "name": "disease_2",
+    "description": "This is disease 2.",
+    "symptoms": ["symptom6","symptom7","symptom8","symptom9","symptom10"]
+}
+
+{
+    "name": "disease_3",
+    "description": "This is disease 3.",
+    "symptoms": ["symptom1","symptom7","symptom8","symptom4","symptom11"]
+}
+
+{
+    "name": "disease_4",
+    "description": "This is disease 4.",
+    "symptoms": ["symptom3","symptom12","symptom10","symptom13","symptom14"]
+}
+
+{
+    "name": "disease_5",
+    "description": "This is disease 5.",
+    "symptoms": ["symptom1","symptom10","symptom9","symptom11","symptom14"]
+}
+
+
+PUT http://localhost:5000/api/diseases/58e1bbc34ef2e398da7745f7
+{
+    "description": "This is updated description for disease_5"
+}

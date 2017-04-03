@@ -1,5 +1,8 @@
 var mongoose    =   require("mongoose");
 
+var addressSchema = require('./address');
+var Address = addressSchema.Address;
+
 var appointmentSchema  = new mongoose.Schema({
 	"patient_id": {type: String},
 	"doctor_id": {type: String},
@@ -8,13 +11,7 @@ var appointmentSchema  = new mongoose.Schema({
 	"location":{
 		"place": {type: String},
 		"phone_number": {type: String},
-		"address":{
-			"street": {type: String},
-			"city": {type: String},
-			"state": {type: String},
-			"county": {type: String},
-			"country": {type: String},
-		}
+		"address": {type: mongoose.Types, ref: 'Address'}
 	}
 });
 

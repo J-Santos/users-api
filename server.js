@@ -3,6 +3,7 @@ var app                 =   express();
 var bodyParser          =   require("body-parser");
 var usersModel          =   require("./models/users");
 var appointmentsModel   =   require("./models/appointments");
+var diseasesModel       =   require("./models/diseases");
 var router              =   express.Router();
 
 app.use(bodyParser.json());
@@ -15,12 +16,12 @@ router.get("/",function(req,res){
 
 router.route("/api/users")
     .get(function(req,res){
-        var query = {
-            email : req.param.email,
-            password : req.param.password
-        }
+        // var query = {
+        //     email : req.param.email,
+        //     password : req.param.password
+        // }
         //console.log('Before getUsers');
-        usersModel.getUsers(query,function(err,users){
+        usersModel.getUsers(req,function(err,users){
             if (err){
                 //console.log('before 500');
                 res.status(500).send(err.message);
@@ -165,7 +166,6 @@ router.route("/api/users/:user_id/appointments/:appointment_id")
         });
     });
 
-
 router.route("/api/users/:user_id/patients")
     .get(function(req,res){
         usersModel.getUserPatients(req,function(err,user){
@@ -178,6 +178,73 @@ router.route("/api/users/:user_id/patients")
             else{
                 res.status(200).json(user);
             }
+        });
+    });
+
+router.route("/api/diseases")
+    .post(function(req,res){
+        diseasesModel.createDisease(req, function (err){
+            if(err){
+                res.status(500).send(err.message);
+            }
+            else{
+                res.status(201).json({ message: 'Disease created!' });
+            }
+        });
+    })
+    .get(function(req,res){
+        var query = {
+            name : req.query.name,
+            symptom : req.query.symptom
+        };
+        diseasesModel.getDiseases(query,function(err,diseases){
+            if (err){
+                res.status(500).send(err.message);
+            }
+            else if(diseases == undefined || diseases == null ){
+                res.status(404).json({ message: 'Disease not found' })
+            }
+            else{
+                res.status(200).json(diseases);
+            }
+        });
+    });
+
+router.route("/api/diseases/:disease_id")
+    .get(function(req,res){
+        diseasesModel.getDisease({_id : req.params.disease_id},function(err,disease){
+            if (err){
+                res.status(500).send(err.message);
+            }
+            else if(disease == undefined || disease == null || disease == []){
+                res.status(404).json({ message: 'Disease not found' })
+            }
+            else{
+                res.status(200).json(disease);
+            }
+        });
+    })
+
+    .put(function(req, res) {
+        diseasesModel.updateDisease({_id : req.params.disease_id},req.body,function(err,disease){
+            if (err){
+                res.status(500).send(err.message);
+            }
+            else if(disease == undefined || disease == null  ){
+                res.status(404).json({ message: 'Disease not found' });
+            }
+            else{
+                res.status(204).send();
+            }
+        });
+    })
+
+    .delete(function(req, res) {
+        diseasesModel.deleteDisease(req,function(err){
+            if (err)
+                res.status(500).send(err.message);
+            else
+                res.status(200).json({ message: 'Disease deleted' });
         });
     });
 
